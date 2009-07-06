@@ -46,6 +46,7 @@ sub TIEARRAY  {
     my $args = shift;
 
     $storage->{__rand_config} = { set => 'numeric', min => 5, max => 8 };
+    $storage->{__max} = 0;
 
     foreach (keys %$args) {
         $storage->{__rand_config}->{$_} = $args->{$_};
@@ -63,6 +64,9 @@ Stores data
 
 sub STORE {
   my ($self, $key, $val) = @_;
+
+  $self->{__max} = $key if $key > $self->{__max} ;
+
   $self->{$key} = $val;
 }
 
@@ -77,8 +81,25 @@ sub FETCH {
 
   $self->{$key} = join '', rand_chars( %{$self->{__rand_config}} ) if ! exists $self->{$key};
 
+
+  $self->{__max} = $key if $key > $self->{__max} ;
+
   return $self->{$key};
 }
+
+=head2 FETCHSIZE
+
+Fetchs size
+
+=cut
+
+sub FETCHSIZE {
+  my ($self, $key) = @_;
+
+  return $self->{__max};
+}
+
+
 
 
 1;

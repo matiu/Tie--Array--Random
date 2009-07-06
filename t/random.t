@@ -38,11 +38,13 @@ ok(!looks_like_number($a_random_alpha), "$a_random_alpha is not a number");
 my @array3;
 tie @array3, 'Tie::Array::Random', {set => 'alpha', min=>10, max=>20};
 
-my $a_random_alpha2 = $array3[1];
+my $a_random_alpha2 = $array3[2];
 
 ok(!looks_like_number($a_random_alpha2) && length($a_random_alpha2) >= 10,
                 "$a_random_alpha2 is a big alpha");
 
+
+ok( $#array3 > 0, "fetch size : $#array3");
 
 
 done_testing;
